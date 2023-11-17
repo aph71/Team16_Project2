@@ -38,7 +38,7 @@ func ReadBinary(filePath string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-
+	//Test comment
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
