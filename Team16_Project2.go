@@ -38,7 +38,6 @@ func ReadBinary(filePath string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	//Test comment
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
@@ -259,7 +258,6 @@ func opcodeTranslation(ins *Instruction) {
 	}
 }
 
-// \/\/ fill these out \/\/
 func processRType(ins *Instruction) {
 	//mask for bits 12 - 16
 	ins.rm = uint8((ins.lineValue & 2031616) >> 16)
@@ -339,14 +337,19 @@ func simulateInstruction(simOutput string, list []Instruction, registry []int, d
 			switch opcode := list[i].opcode; {
 			//*****B INSTRUCTION****
 			case opcode >= 160 && opcode <= 191:
+				fmt.Fprintf(simOutputFile, "============\n")
+				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
+
 			//*****AND INSTRUCTION*****
 			case opcode == 1104:
+				fmt.Fprintf(simOutputFile, "============\n")
+				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
 			//*****ADD INSTRUCTION*****
 			case opcode == 1112:
 				//fmt.Println(list[i].rn)
 				//ADDED FOR TESTING PURPOSES ONLY
-				registry[1] = 1
-				registry[0] = 1
+				registry[1] = 0
+				registry[0] = 0
 				//END TESTING BLOCK
 				regDest := registry[list[i].rm] + registry[list[i].rn]
 				registry[list[i].rd] = regDest
@@ -361,36 +364,78 @@ func simulateInstruction(simOutput string, list []Instruction, registry []int, d
 				cycle++
 				//*****ADDI INSTRUCTION*****
 			case opcode == 1160 || opcode == 1161:
+				fmt.Fprintf(simOutputFile, "============\n")
+				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
 				//*****ORR INSTRUCTION*****
 			case opcode == 1360:
+				fmt.Fprintf(simOutputFile, "============\n")
+				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
 				//*****CBZ INSTRUCTION*****
 			case opcode >= 1440 && opcode <= 1447:
+				if registry[list[i].conditional] == 0 {
+					i = i + int(list[i].offset)
+				}
+				cycle++
+				fmt.Fprintf(simOutputFile, "============\n")
+				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\tR%d, #%d\n", cycle, list[i].memLoc, list[i].op, list[i].conditional, list[i].offset)
+				fmt.Fprintf(simOutputFile, "registers:\n")
+				fmt.Fprintf(simOutputFile, "r00:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[0], registry[1], registry[2], registry[3], registry[4], registry[5], registry[6], registry[7])
+				fmt.Fprintf(simOutputFile, "r08:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[8], registry[9], registry[10], registry[11], registry[12], registry[13], registry[14], registry[15])
+				fmt.Fprintf(simOutputFile, "r16:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[16], registry[17], registry[18], registry[19], registry[20], registry[21], registry[22], registry[7])
+				fmt.Fprintf(simOutputFile, "r24:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[24], registry[25], registry[26], registry[27], registry[28], registry[29], registry[30], registry[31])
+				fmt.Fprintf(simOutputFile, "============\n")
 				//*****CBNZ*****
 			case opcode >= 1448 && opcode <= 1455:
+				fmt.Fprintf(simOutputFile, "============\n")
+				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
 				//*****SUB INSTRUCTION*****
 			case opcode == 1624:
+				fmt.Fprintf(simOutputFile, "============\n")
+				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
 				//*****SUBI INSTRUCTION*****
 			case opcode == 1672 || opcode == 1673:
+				fmt.Fprintf(simOutputFile, "============\n")
+				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
 				//*****MOVZ*****
 			case opcode >= 1684 && opcode <= 1687:
+				fmt.Fprintf(simOutputFile, "============\n")
+				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
 				//*****MOVK*****
 			case opcode >= 1940 && opcode <= 1943:
+				fmt.Fprintf(simOutputFile, "============\n")
+				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
 				//*****LSR*****
 			case opcode == 1690:
+				fmt.Fprintf(simOutputFile, "============\n")
+				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
 				//*****LSL*****
 			case opcode == 1691:
+				fmt.Fprintf(simOutputFile, "============\n")
+				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
 				//*****STUR*****
 			case opcode == 1984:
+				fmt.Fprintf(simOutputFile, "============\n")
+				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
 				//*****LDUR*****
 			case opcode == 1986:
+				fmt.Fprintf(simOutputFile, "============\n")
+				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
 				//*****ASR*****
 			case opcode == 1692:
+				fmt.Fprintf(simOutputFile, "============\n")
+				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
 				//*****NOP*****
 			case opcode == 0:
+				fmt.Fprintf(simOutputFile, "============\n")
+				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
 				//*****EOR*****
 			case opcode == 1872:
+				fmt.Fprintf(simOutputFile, "============\n")
+				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
 				//*****BREAK*****
 			case opcode == 2038:
+				fmt.Fprintf(simOutputFile, "============\n")
+				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
 
 			}
 		}
