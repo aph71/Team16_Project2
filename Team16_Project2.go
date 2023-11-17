@@ -337,8 +337,11 @@ func simulateInstruction(simOutput string, list []Instruction, registry []int, d
 	for i := 0; i < len(list); i++ {
 		if !breakHit {
 			switch opcode := list[i].opcode; {
+			//*****B INSTRUCTION****
 			case opcode >= 160 && opcode <= 191:
-				//ADD
+			//*****AND INSTRUCTION*****
+			case opcode == 1104:
+			//*****ADD INSTRUCTION*****
 			case opcode == 1112:
 				//fmt.Println(list[i].rn)
 				//ADDED FOR TESTING PURPOSES ONLY
@@ -356,19 +359,39 @@ func simulateInstruction(simOutput string, list []Instruction, registry []int, d
 				fmt.Fprintf(simOutputFile, "r24:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[24], registry[25], registry[26], registry[27], registry[28], registry[29], registry[30], registry[31])
 				fmt.Fprintf(simOutputFile, "============\n")
 				cycle++
-				/*	case "I":
-						processIType(&list[i])
-					case "CB":
-						processCBType(&list[i])
-					case "IM":
-						processIMType(&list[i])
-					case "D":
-						processDType(&list[i])
-					case "R":
-						processRType(&list[i])
-					case "BREAK":
-						breakHit = true
-				*/
+				//*****ADDI INSTRUCTION*****
+			case opcode == 1160 || opcode == 1161:
+				//*****ORR INSTRUCTION*****
+			case opcode == 1360:
+				//*****CBZ INSTRUCTION*****
+			case opcode >= 1440 && opcode <= 1447:
+				//*****CBNZ*****
+			case opcode >= 1448 && opcode <= 1455:
+				//*****SUB INSTRUCTION*****
+			case opcode == 1624:
+				//*****SUBI INSTRUCTION*****
+			case opcode == 1672 || opcode == 1673:
+				//*****MOVZ*****
+			case opcode >= 1684 && opcode <= 1687:
+				//*****MOVK*****
+			case opcode >= 1940 && opcode <= 1943:
+				//*****LSR*****
+			case opcode == 1690:
+				//*****LSL*****
+			case opcode == 1691:
+				//*****STUR*****
+			case opcode == 1984:
+				//*****LDUR*****
+			case opcode == 1986:
+				//*****ASR*****
+			case opcode == 1692:
+				//*****NOP*****
+			case opcode == 0:
+				//*****EOR*****
+			case opcode == 1872:
+				//*****BREAK*****
+			case opcode == 2038:
+
 			}
 		}
 	}
