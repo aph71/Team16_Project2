@@ -341,8 +341,10 @@ func simulateInstruction(simOutput string, list []Instruction, registry []int, d
 				//ADD
 			case opcode == 1112:
 				//fmt.Println(list[i].rn)
+				//ADDED FOR TESTING PURPOSES ONLY
 				registry[1] = 1
 				registry[0] = 1
+				//END TESTING BLOCK
 				regDest := registry[list[i].rm] + registry[list[i].rn]
 				registry[list[i].rd] = regDest
 				fmt.Fprintf(simOutputFile, "============\n")
