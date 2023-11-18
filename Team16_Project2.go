@@ -350,8 +350,10 @@ func simulateInstruction(simOutput string, list []Instruction, registry []int, d
 
 			//*****AND INSTRUCTION*****
 			case opcode == 1104:
+				regDest := registry[list[i].rn] & registry[list[i].rm]
+				registry[list[i].rd] = regDest
 				fmt.Fprintf(simOutputFile, "============\n")
-				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
+				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s R%d, R%d, R%d\n", cycle, list[i].memLoc, list[i].op, list[i].rd, list[i].rn, list[i].rm)
 				fmt.Fprintf(simOutputFile, "registers:\n")
 				fmt.Fprintf(simOutputFile, "r00:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[0], registry[1], registry[2], registry[3], registry[4], registry[5], registry[6], registry[7])
 				fmt.Fprintf(simOutputFile, "r08:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[8], registry[9], registry[10], registry[11], registry[12], registry[13], registry[14], registry[15])
@@ -362,7 +364,7 @@ func simulateInstruction(simOutput string, list []Instruction, registry []int, d
 			case opcode == 1112:
 				//fmt.Println(list[i].rn)
 				//ADDED FOR TESTING PURPOSES ONLY
-				registry[1] = 1
+				registry[1] = 10
 				registry[0] = 0
 				//END TESTING BLOCK
 				regDest := registry[list[i].rm] + registry[list[i].rn]
