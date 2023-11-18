@@ -338,17 +338,31 @@ func simulateInstruction(simOutput string, list []Instruction, registry []int, d
 			//*****B INSTRUCTION****
 			case opcode >= 160 && opcode <= 191:
 				fmt.Fprintf(simOutputFile, "============\n")
-				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
+				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t#%d\n", cycle, list[i].memLoc, list[i].op, list[i].offset)
+				fmt.Fprintf(simOutputFile, "registers:\n")
+				fmt.Fprintf(simOutputFile, "r00:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[0], registry[1], registry[2], registry[3], registry[4], registry[5], registry[6], registry[7])
+				fmt.Fprintf(simOutputFile, "r08:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[8], registry[9], registry[10], registry[11], registry[12], registry[13], registry[14], registry[15])
+				fmt.Fprintf(simOutputFile, "r16:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[16], registry[17], registry[18], registry[19], registry[20], registry[21], registry[22], registry[7])
+				fmt.Fprintf(simOutputFile, "r24:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[24], registry[25], registry[26], registry[27], registry[28], registry[29], registry[30], registry[31])
+				fmt.Fprintf(simOutputFile, "============\n")
+				cycle++
+				i = i + int(list[i].offset-1)
 
 			//*****AND INSTRUCTION*****
 			case opcode == 1104:
 				fmt.Fprintf(simOutputFile, "============\n")
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
+				fmt.Fprintf(simOutputFile, "registers:\n")
+				fmt.Fprintf(simOutputFile, "r00:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[0], registry[1], registry[2], registry[3], registry[4], registry[5], registry[6], registry[7])
+				fmt.Fprintf(simOutputFile, "r08:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[8], registry[9], registry[10], registry[11], registry[12], registry[13], registry[14], registry[15])
+				fmt.Fprintf(simOutputFile, "r16:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[16], registry[17], registry[18], registry[19], registry[20], registry[21], registry[22], registry[7])
+				fmt.Fprintf(simOutputFile, "r24:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[24], registry[25], registry[26], registry[27], registry[28], registry[29], registry[30], registry[31])
+				fmt.Fprintf(simOutputFile, "============\n")
 			//*****ADD INSTRUCTION*****
 			case opcode == 1112:
 				//fmt.Println(list[i].rn)
 				//ADDED FOR TESTING PURPOSES ONLY
-				registry[1] = 0
+				registry[1] = 1
 				registry[0] = 0
 				//END TESTING BLOCK
 				regDest := registry[list[i].rm] + registry[list[i].rn]
@@ -364,18 +378,46 @@ func simulateInstruction(simOutput string, list []Instruction, registry []int, d
 				cycle++
 				//*****ADDI INSTRUCTION*****
 			case opcode == 1160 || opcode == 1161:
+				regDest2 := registry[list[i].rn] + int(list[i].immediate)
+				registry[list[i].rd] = regDest2
 				fmt.Fprintf(simOutputFile, "============\n")
-				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
+				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s R%d, R%d, #%d\n", cycle, list[i].memLoc, list[i].op, list[i].rd, list[i].rn, list[i].immediate)
+				fmt.Fprintf(simOutputFile, "registers:\n")
+				fmt.Fprintf(simOutputFile, "r00:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[0], registry[1], registry[2], registry[3], registry[4], registry[5], registry[6], registry[7])
+				fmt.Fprintf(simOutputFile, "r08:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[8], registry[9], registry[10], registry[11], registry[12], registry[13], registry[14], registry[15])
+				fmt.Fprintf(simOutputFile, "r16:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[16], registry[17], registry[18], registry[19], registry[20], registry[21], registry[22], registry[7])
+				fmt.Fprintf(simOutputFile, "r24:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[24], registry[25], registry[26], registry[27], registry[28], registry[29], registry[30], registry[31])
+				fmt.Fprintf(simOutputFile, "============\n")
+				cycle++
 				//*****ORR INSTRUCTION*****
 			case opcode == 1360:
 				fmt.Fprintf(simOutputFile, "============\n")
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
+				fmt.Fprintf(simOutputFile, "registers:\n")
+				fmt.Fprintf(simOutputFile, "r00:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[0], registry[1], registry[2], registry[3], registry[4], registry[5], registry[6], registry[7])
+				fmt.Fprintf(simOutputFile, "r08:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[8], registry[9], registry[10], registry[11], registry[12], registry[13], registry[14], registry[15])
+				fmt.Fprintf(simOutputFile, "r16:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[16], registry[17], registry[18], registry[19], registry[20], registry[21], registry[22], registry[7])
+				fmt.Fprintf(simOutputFile, "r24:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[24], registry[25], registry[26], registry[27], registry[28], registry[29], registry[30], registry[31])
+				fmt.Fprintf(simOutputFile, "============\n")
+				cycle++
 				//*****CBZ INSTRUCTION*****
 			case opcode >= 1440 && opcode <= 1447:
-				if registry[list[i].conditional] == 0 {
-					i = i + int(list[i].offset)
+				{
+					fmt.Fprintf(simOutputFile, "============\n")
+					fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\tR%d, #%d\n", cycle, list[i].memLoc, list[i].op, list[i].conditional, list[i].offset)
+					fmt.Fprintf(simOutputFile, "registers:\n")
+					fmt.Fprintf(simOutputFile, "r00:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[0], registry[1], registry[2], registry[3], registry[4], registry[5], registry[6], registry[7])
+					fmt.Fprintf(simOutputFile, "r08:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[8], registry[9], registry[10], registry[11], registry[12], registry[13], registry[14], registry[15])
+					fmt.Fprintf(simOutputFile, "r16:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[16], registry[17], registry[18], registry[19], registry[20], registry[21], registry[22], registry[7])
+					fmt.Fprintf(simOutputFile, "r24:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[24], registry[25], registry[26], registry[27], registry[28], registry[29], registry[30], registry[31])
+					fmt.Fprintf(simOutputFile, "============\n")
+					cycle++
+					if registry[list[i].conditional] == 0 {
+						i = i + int(list[i].offset-1)
+					}
 				}
-				cycle++
+				//*****CBNZ*****
+			case opcode >= 1448 && opcode <= 1455:
 				fmt.Fprintf(simOutputFile, "============\n")
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\tR%d, #%d\n", cycle, list[i].memLoc, list[i].op, list[i].conditional, list[i].offset)
 				fmt.Fprintf(simOutputFile, "registers:\n")
@@ -384,58 +426,142 @@ func simulateInstruction(simOutput string, list []Instruction, registry []int, d
 				fmt.Fprintf(simOutputFile, "r16:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[16], registry[17], registry[18], registry[19], registry[20], registry[21], registry[22], registry[7])
 				fmt.Fprintf(simOutputFile, "r24:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[24], registry[25], registry[26], registry[27], registry[28], registry[29], registry[30], registry[31])
 				fmt.Fprintf(simOutputFile, "============\n")
-				//*****CBNZ*****
-			case opcode >= 1448 && opcode <= 1455:
-				fmt.Fprintf(simOutputFile, "============\n")
-				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
+				cycle++
+				if registry[list[i].conditional] != 0 {
+					i = i + int(list[i].offset-1)
+				}
 				//*****SUB INSTRUCTION*****
 			case opcode == 1624:
 				fmt.Fprintf(simOutputFile, "============\n")
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
+				fmt.Fprintf(simOutputFile, "registers:\n")
+				fmt.Fprintf(simOutputFile, "r00:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[0], registry[1], registry[2], registry[3], registry[4], registry[5], registry[6], registry[7])
+				fmt.Fprintf(simOutputFile, "r08:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[8], registry[9], registry[10], registry[11], registry[12], registry[13], registry[14], registry[15])
+				fmt.Fprintf(simOutputFile, "r16:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[16], registry[17], registry[18], registry[19], registry[20], registry[21], registry[22], registry[7])
+				fmt.Fprintf(simOutputFile, "r24:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[24], registry[25], registry[26], registry[27], registry[28], registry[29], registry[30], registry[31])
+				fmt.Fprintf(simOutputFile, "============\n")
+				cycle++
 				//*****SUBI INSTRUCTION*****
 			case opcode == 1672 || opcode == 1673:
 				fmt.Fprintf(simOutputFile, "============\n")
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
+				fmt.Fprintf(simOutputFile, "registers:\n")
+				fmt.Fprintf(simOutputFile, "r00:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[0], registry[1], registry[2], registry[3], registry[4], registry[5], registry[6], registry[7])
+				fmt.Fprintf(simOutputFile, "r08:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[8], registry[9], registry[10], registry[11], registry[12], registry[13], registry[14], registry[15])
+				fmt.Fprintf(simOutputFile, "r16:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[16], registry[17], registry[18], registry[19], registry[20], registry[21], registry[22], registry[7])
+				fmt.Fprintf(simOutputFile, "r24:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[24], registry[25], registry[26], registry[27], registry[28], registry[29], registry[30], registry[31])
+				fmt.Fprintf(simOutputFile, "============\n")
+				cycle++
 				//*****MOVZ*****
 			case opcode >= 1684 && opcode <= 1687:
 				fmt.Fprintf(simOutputFile, "============\n")
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
+				fmt.Fprintf(simOutputFile, "registers:\n")
+				fmt.Fprintf(simOutputFile, "r00:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[0], registry[1], registry[2], registry[3], registry[4], registry[5], registry[6], registry[7])
+				fmt.Fprintf(simOutputFile, "r08:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[8], registry[9], registry[10], registry[11], registry[12], registry[13], registry[14], registry[15])
+				fmt.Fprintf(simOutputFile, "r16:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[16], registry[17], registry[18], registry[19], registry[20], registry[21], registry[22], registry[7])
+				fmt.Fprintf(simOutputFile, "r24:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[24], registry[25], registry[26], registry[27], registry[28], registry[29], registry[30], registry[31])
+				fmt.Fprintf(simOutputFile, "============\n")
+				cycle++
 				//*****MOVK*****
 			case opcode >= 1940 && opcode <= 1943:
 				fmt.Fprintf(simOutputFile, "============\n")
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
+				fmt.Fprintf(simOutputFile, "registers:\n")
+				fmt.Fprintf(simOutputFile, "r00:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[0], registry[1], registry[2], registry[3], registry[4], registry[5], registry[6], registry[7])
+				fmt.Fprintf(simOutputFile, "r08:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[8], registry[9], registry[10], registry[11], registry[12], registry[13], registry[14], registry[15])
+				fmt.Fprintf(simOutputFile, "r16:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[16], registry[17], registry[18], registry[19], registry[20], registry[21], registry[22], registry[7])
+				fmt.Fprintf(simOutputFile, "r24:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[24], registry[25], registry[26], registry[27], registry[28], registry[29], registry[30], registry[31])
+				fmt.Fprintf(simOutputFile, "============\n")
+				cycle++
 				//*****LSR*****
 			case opcode == 1690:
 				fmt.Fprintf(simOutputFile, "============\n")
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
+				fmt.Fprintf(simOutputFile, "registers:\n")
+				fmt.Fprintf(simOutputFile, "r00:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[0], registry[1], registry[2], registry[3], registry[4], registry[5], registry[6], registry[7])
+				fmt.Fprintf(simOutputFile, "r08:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[8], registry[9], registry[10], registry[11], registry[12], registry[13], registry[14], registry[15])
+				fmt.Fprintf(simOutputFile, "r16:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[16], registry[17], registry[18], registry[19], registry[20], registry[21], registry[22], registry[7])
+				fmt.Fprintf(simOutputFile, "r24:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[24], registry[25], registry[26], registry[27], registry[28], registry[29], registry[30], registry[31])
+				fmt.Fprintf(simOutputFile, "============\n")
+				cycle++
 				//*****LSL*****
 			case opcode == 1691:
 				fmt.Fprintf(simOutputFile, "============\n")
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
+				fmt.Fprintf(simOutputFile, "registers:\n")
+				fmt.Fprintf(simOutputFile, "r00:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[0], registry[1], registry[2], registry[3], registry[4], registry[5], registry[6], registry[7])
+				fmt.Fprintf(simOutputFile, "r08:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[8], registry[9], registry[10], registry[11], registry[12], registry[13], registry[14], registry[15])
+				fmt.Fprintf(simOutputFile, "r16:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[16], registry[17], registry[18], registry[19], registry[20], registry[21], registry[22], registry[7])
+				fmt.Fprintf(simOutputFile, "r24:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[24], registry[25], registry[26], registry[27], registry[28], registry[29], registry[30], registry[31])
+				fmt.Fprintf(simOutputFile, "============\n")
+				cycle++
 				//*****STUR*****
 			case opcode == 1984:
 				fmt.Fprintf(simOutputFile, "============\n")
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
+				fmt.Fprintf(simOutputFile, "registers:\n")
+				fmt.Fprintf(simOutputFile, "r00:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[0], registry[1], registry[2], registry[3], registry[4], registry[5], registry[6], registry[7])
+				fmt.Fprintf(simOutputFile, "r08:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[8], registry[9], registry[10], registry[11], registry[12], registry[13], registry[14], registry[15])
+				fmt.Fprintf(simOutputFile, "r16:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[16], registry[17], registry[18], registry[19], registry[20], registry[21], registry[22], registry[7])
+				fmt.Fprintf(simOutputFile, "r24:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[24], registry[25], registry[26], registry[27], registry[28], registry[29], registry[30], registry[31])
+				fmt.Fprintf(simOutputFile, "============\n")
+				cycle++
 				//*****LDUR*****
 			case opcode == 1986:
 				fmt.Fprintf(simOutputFile, "============\n")
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
+				fmt.Fprintf(simOutputFile, "registers:\n")
+				fmt.Fprintf(simOutputFile, "r00:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[0], registry[1], registry[2], registry[3], registry[4], registry[5], registry[6], registry[7])
+				fmt.Fprintf(simOutputFile, "r08:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[8], registry[9], registry[10], registry[11], registry[12], registry[13], registry[14], registry[15])
+				fmt.Fprintf(simOutputFile, "r16:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[16], registry[17], registry[18], registry[19], registry[20], registry[21], registry[22], registry[7])
+				fmt.Fprintf(simOutputFile, "r24:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[24], registry[25], registry[26], registry[27], registry[28], registry[29], registry[30], registry[31])
+				fmt.Fprintf(simOutputFile, "============\n")
+				cycle++
 				//*****ASR*****
 			case opcode == 1692:
 				fmt.Fprintf(simOutputFile, "============\n")
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
+				fmt.Fprintf(simOutputFile, "registers:\n")
+				fmt.Fprintf(simOutputFile, "r00:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[0], registry[1], registry[2], registry[3], registry[4], registry[5], registry[6], registry[7])
+				fmt.Fprintf(simOutputFile, "r08:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[8], registry[9], registry[10], registry[11], registry[12], registry[13], registry[14], registry[15])
+				fmt.Fprintf(simOutputFile, "r16:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[16], registry[17], registry[18], registry[19], registry[20], registry[21], registry[22], registry[7])
+				fmt.Fprintf(simOutputFile, "r24:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[24], registry[25], registry[26], registry[27], registry[28], registry[29], registry[30], registry[31])
+				fmt.Fprintf(simOutputFile, "============\n")
+				cycle++
 				//*****NOP*****
 			case opcode == 0:
 				fmt.Fprintf(simOutputFile, "============\n")
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
+				fmt.Fprintf(simOutputFile, "registers:\n")
+				fmt.Fprintf(simOutputFile, "r00:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[0], registry[1], registry[2], registry[3], registry[4], registry[5], registry[6], registry[7])
+				fmt.Fprintf(simOutputFile, "r08:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[8], registry[9], registry[10], registry[11], registry[12], registry[13], registry[14], registry[15])
+				fmt.Fprintf(simOutputFile, "r16:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[16], registry[17], registry[18], registry[19], registry[20], registry[21], registry[22], registry[7])
+				fmt.Fprintf(simOutputFile, "r24:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[24], registry[25], registry[26], registry[27], registry[28], registry[29], registry[30], registry[31])
+				fmt.Fprintf(simOutputFile, "============\n")
+				cycle++
 				//*****EOR*****
 			case opcode == 1872:
 				fmt.Fprintf(simOutputFile, "============\n")
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
+				fmt.Fprintf(simOutputFile, "registers:\n")
+				fmt.Fprintf(simOutputFile, "r00:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[0], registry[1], registry[2], registry[3], registry[4], registry[5], registry[6], registry[7])
+				fmt.Fprintf(simOutputFile, "r08:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[8], registry[9], registry[10], registry[11], registry[12], registry[13], registry[14], registry[15])
+				fmt.Fprintf(simOutputFile, "r16:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[16], registry[17], registry[18], registry[19], registry[20], registry[21], registry[22], registry[7])
+				fmt.Fprintf(simOutputFile, "r24:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[24], registry[25], registry[26], registry[27], registry[28], registry[29], registry[30], registry[31])
+				fmt.Fprintf(simOutputFile, "============\n")
+				cycle++
 				//*****BREAK*****
 			case opcode == 2038:
 				fmt.Fprintf(simOutputFile, "============\n")
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
+				fmt.Fprintf(simOutputFile, "registers:\n")
+				fmt.Fprintf(simOutputFile, "r00:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[0], registry[1], registry[2], registry[3], registry[4], registry[5], registry[6], registry[7])
+				fmt.Fprintf(simOutputFile, "r08:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[8], registry[9], registry[10], registry[11], registry[12], registry[13], registry[14], registry[15])
+				fmt.Fprintf(simOutputFile, "r16:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[16], registry[17], registry[18], registry[19], registry[20], registry[21], registry[22], registry[7])
+				fmt.Fprintf(simOutputFile, "r24:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[24], registry[25], registry[26], registry[27], registry[28], registry[29], registry[30], registry[31])
+				fmt.Fprintf(simOutputFile, "============\n")
+				cycle++
 
 			}
 		}
