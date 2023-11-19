@@ -378,6 +378,7 @@ func simulateInstruction(simOutput string, list []Instruction, registry []int, m
 				registry[list[i].rd] = regDest
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s R%d, R%d, R%d\n", cycle, list[i].memLoc, list[i].op, list[i].rd, list[i].rn, list[i].rm)
 				outputRegistersToFile(registry, simOutputFile, otherData)
+				cycle++
 
 			//*****ADD INSTRUCTION*****
 			case opcode == 1112:
