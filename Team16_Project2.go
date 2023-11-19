@@ -394,7 +394,8 @@ func simulateInstruction(simOutput string, list []Instruction, registry []int, m
 			case opcode == 1160 || opcode == 1161:
 				regDest := registry[list[i].rn] + int(list[i].immediate)
 				registry[list[i].rd] = regDest
-				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s R%d, R%d, R%d\n", cycle, list[i].memLoc, list[i].op, list[i].rd, list[i].rn, list[i].immediate)
+				//changed 'R' to '#' for the immediate value
+				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s R%d, R%d, #%d\n", cycle, list[i].memLoc, list[i].op, list[i].rd, list[i].rn, list[i].immediate)
 				outputRegistersToFile(registry, simOutputFile, otherData)
 				cycle++
 				//*****ORR INSTRUCTION*****
