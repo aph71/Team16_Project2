@@ -335,8 +335,10 @@ func outputRegistersToFile(registry []int, simOutputFile *os.File, myMap map[int
 		}
 		fmt.Fprintf(simOutputFile, "\n")
 	}
+	//put this print statement out of the if statement because
+	//"data" should print no matter what
+	fmt.Fprintf(simOutputFile, "data:\n")
 	if len(myMap) > 0 {
-		fmt.Fprintf(simOutputFile, "data:\n")
 		for k1, v1 := range myMap {
 			fmt.Fprintf(simOutputFile, "%d:", k1)
 			for k2 := 0; k2 < 8; k2++ { // Ensure iteration for keys 0 to 7
