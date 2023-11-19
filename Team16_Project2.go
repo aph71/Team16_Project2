@@ -350,6 +350,7 @@ func outputRegistersToFile(registry []int, simOutputFile *os.File, myMap map[int
 			fmt.Fprintf(simOutputFile, "\n")
 		}
 	}
+	fmt.Fprintf(simOutputFile, "============\n")
 }
 
 func simulateInstruction(simOutput string, list []Instruction, registry []int, myMap map[int]map[int]int) {
@@ -367,7 +368,6 @@ func simulateInstruction(simOutput string, list []Instruction, registry []int, m
 			switch opcode := list[i].opcode; {
 			//*****B INSTRUCTION****
 			case opcode >= 160 && opcode <= 191:
-				fmt.Fprintf(simOutputFile, "============\n")
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t#%d\n", cycle, list[i].memLoc, list[i].op, list[i].offset)
 				outputRegistersToFile(registry, simOutputFile, otherData)
 				cycle++
@@ -376,7 +376,6 @@ func simulateInstruction(simOutput string, list []Instruction, registry []int, m
 			case opcode == 1104:
 				regDest := registry[list[i].rn] & registry[list[i].rm]
 				registry[list[i].rd] = regDest
-				fmt.Fprintf(simOutputFile, "============\n")
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s R%d, R%d, R%d\n", cycle, list[i].memLoc, list[i].op, list[i].rd, list[i].rn, list[i].rm)
 				outputRegistersToFile(registry, simOutputFile, otherData)
 
@@ -387,7 +386,6 @@ func simulateInstruction(simOutput string, list []Instruction, registry []int, m
 				//END TESTING BLOCK
 				regDest := registry[list[i].rm] + registry[list[i].rn]
 				registry[list[i].rd] = regDest
-				fmt.Fprintf(simOutputFile, "============\n")
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s R%d, R%d, R%d\n", cycle, list[i].memLoc, list[i].op, list[i].rd, list[i].rn, list[i].rm)
 				outputRegistersToFile(registry, simOutputFile, otherData)
 
@@ -396,16 +394,13 @@ func simulateInstruction(simOutput string, list []Instruction, registry []int, m
 			case opcode == 1160 || opcode == 1161:
 				regDest := registry[list[i].rn] + int(list[i].immediate)
 				registry[list[i].rd] = regDest
-				fmt.Fprintf(simOutputFile, "============\n")
-				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s R%d, R%d, #%d\n", cycle, list[i].memLoc, list[i].op, list[i].rd, list[i].rn, list[i].immediate)
+				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s R%d, R%d, R%d\n", cycle, list[i].memLoc, list[i].op, list[i].rd, list[i].rn, list[i].immediate)
 				outputRegistersToFile(registry, simOutputFile, otherData)
-
 				cycle++
 				//*****ORR INSTRUCTION*****
 			case opcode == 1360:
 				regDest := registry[list[i].rn] | registry[list[i].rm]
 				registry[list[i].rd] = regDest
-				fmt.Fprintf(simOutputFile, "============\n")
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s R%d, R%d, R%d\n", cycle, list[i].memLoc, list[i].op, list[i].rd, list[i].rn, list[i].rm)
 				outputRegistersToFile(registry, simOutputFile, otherData)
 
@@ -413,7 +408,6 @@ func simulateInstruction(simOutput string, list []Instruction, registry []int, m
 				//*****CBZ INSTRUCTION*****
 			case opcode >= 1440 && opcode <= 1447:
 				{
-					fmt.Fprintf(simOutputFile, "============\n")
 					fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\tR%d, #%d\n", cycle, list[i].memLoc, list[i].op, list[i].conditional, list[i].offset)
 					outputRegistersToFile(registry, simOutputFile, otherData)
 
@@ -424,7 +418,6 @@ func simulateInstruction(simOutput string, list []Instruction, registry []int, m
 				}
 				//*****CBNZ*****
 			case opcode >= 1448 && opcode <= 1455:
-				fmt.Fprintf(simOutputFile, "============\n")
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\tR%d, #%d\n", cycle, list[i].memLoc, list[i].op, list[i].conditional, list[i].offset)
 				outputRegistersToFile(registry, simOutputFile, otherData)
 
@@ -436,7 +429,6 @@ func simulateInstruction(simOutput string, list []Instruction, registry []int, m
 			case opcode == 1624:
 				regDest := registry[list[i].rm] - registry[list[i].rn]
 				registry[list[i].rd] = regDest
-				fmt.Fprintf(simOutputFile, "============\n")
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
 				outputRegistersToFile(registry, simOutputFile, otherData)
 
@@ -445,35 +437,29 @@ func simulateInstruction(simOutput string, list []Instruction, registry []int, m
 			case opcode == 1672 || opcode == 1673:
 				regDest := registry[list[i].rn] - int(list[i].immediate)
 				registry[list[i].rd] = regDest
-				fmt.Fprintf(simOutputFile, "============\n")
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s R%d, R%d, #%d\n", cycle, list[i].memLoc, list[i].op, list[i].rd, list[i].rn, list[i].immediate)
 				outputRegistersToFile(registry, simOutputFile, otherData)
-
 				cycle++
 				//*****MOVZ*****
 			case opcode >= 1684 && opcode <= 1687:
-				fmt.Fprintf(simOutputFile, "============\n")
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
 				outputRegistersToFile(registry, simOutputFile, otherData)
 
 				cycle++
 				//*****MOVK*****
 			case opcode >= 1940 && opcode <= 1943:
-				fmt.Fprintf(simOutputFile, "============\n")
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
 				outputRegistersToFile(registry, simOutputFile, otherData)
 
 				cycle++
 				//*****LSR*****
 			case opcode == 1690:
-				fmt.Fprintf(simOutputFile, "============\n")
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
 				outputRegistersToFile(registry, simOutputFile, otherData)
 
 				cycle++
 				//*****LSL*****
 			case opcode == 1691:
-				fmt.Fprintf(simOutputFile, "============\n")
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
 				outputRegistersToFile(registry, simOutputFile, otherData)
 
@@ -483,60 +469,51 @@ func simulateInstruction(simOutput string, list []Instruction, registry []int, m
 				destAddress := registry[list[i].rn] + int((list[i].address)*4)
 				data := registry[list[i].rt]
 				if _, ok := myMap[destAddress]; !ok {
-					// If the key doesn't exist, create the inner map and initialize 8 values to 0
 					myMap[destAddress] = make(map[int]int)
 					for i := 0; i < 8; i++ {
 						myMap[destAddress][i] = 0
 						myMap[destAddress][0] = data
 					}
 				}
-				fmt.Fprintf(simOutputFile, "============\n")
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\tR%d, [R%d, #%d]\n", cycle, list[i].memLoc, list[i].op, list[i].rt, list[i].rn,
 					list[i].address)
 				outputRegistersToFile(registry, simOutputFile, otherData)
 				cycle++
 				//*****LDUR*****
 			case opcode == 1986:
-				fmt.Fprintf(simOutputFile, "============\n")
-				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
-				fmt.Fprintf(simOutputFile, "registers:\n")
-				fmt.Fprintf(simOutputFile, "r00:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[0], registry[1], registry[2], registry[3], registry[4], registry[5], registry[6], registry[7])
-				fmt.Fprintf(simOutputFile, "r08:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[8], registry[9], registry[10], registry[11], registry[12], registry[13], registry[14], registry[15])
-				fmt.Fprintf(simOutputFile, "r16:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[16], registry[17], registry[18], registry[19], registry[20], registry[21], registry[22], registry[7])
-				fmt.Fprintf(simOutputFile, "r24:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[24], registry[25], registry[26], registry[27], registry[28], registry[29], registry[30], registry[31])
+				destAddress := registry[list[i].rn] + int((list[i].address)*4)
+				if _, ok := myMap[destAddress]; !ok {
+					// If the key doesn't exist, create the inner map and initialize 8 values to 0
+					data := 0
+					registry[list[i].rt] = data
+				} else {
+					data := myMap[destAddress][0]
+					registry[list[i].rt] = data
+				}
+				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\tR%d, [R%d, #%d]\n", cycle, list[i].memLoc, list[i].op, list[i].rt,
+					list[i].rn, list[i].address)
+				outputRegistersToFile(registry, simOutputFile, otherData)
 				cycle++
 				//*****ASR*****
 			case opcode == 1692:
-				fmt.Fprintf(simOutputFile, "============\n")
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
-				fmt.Fprintf(simOutputFile, "registers:\n")
-				fmt.Fprintf(simOutputFile, "r00:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[0], registry[1], registry[2], registry[3], registry[4], registry[5], registry[6], registry[7])
-				fmt.Fprintf(simOutputFile, "r08:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[8], registry[9], registry[10], registry[11], registry[12], registry[13], registry[14], registry[15])
-				fmt.Fprintf(simOutputFile, "r16:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[16], registry[17], registry[18], registry[19], registry[20], registry[21], registry[22], registry[7])
-				fmt.Fprintf(simOutputFile, "r24:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[24], registry[25], registry[26], registry[27], registry[28], registry[29], registry[30], registry[31])
+				outputRegistersToFile(registry, simOutputFile, otherData)
 				cycle++
 				//*****NOP*****
 			case opcode == 0:
-				fmt.Fprintf(simOutputFile, "============\n")
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
-				fmt.Fprintf(simOutputFile, "registers:\n")
-				fmt.Fprintf(simOutputFile, "r00:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[0], registry[1], registry[2], registry[3], registry[4], registry[5], registry[6], registry[7])
-				fmt.Fprintf(simOutputFile, "r08:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[8], registry[9], registry[10], registry[11], registry[12], registry[13], registry[14], registry[15])
-				fmt.Fprintf(simOutputFile, "r16:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[16], registry[17], registry[18], registry[19], registry[20], registry[21], registry[22], registry[7])
-				fmt.Fprintf(simOutputFile, "r24:\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n", registry[24], registry[25], registry[26], registry[27], registry[28], registry[29], registry[30], registry[31])
+				outputRegistersToFile(registry, simOutputFile, otherData)
 				cycle++
 				//*****EOR*****
 			case opcode == 1872:
 				regDest := registry[list[i].rn] ^ registry[list[i].rm]
 				registry[list[i].rd] = regDest
-				fmt.Fprintf(simOutputFile, "============\n")
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s R%d, R%d, R%d\n", cycle, list[i].memLoc, list[i].op, list[i].rd, list[i].rn, list[i].rm)
 				outputRegistersToFile(registry, simOutputFile, otherData)
 
 				cycle++
 				//*****BREAK*****
 			case opcode == 2038:
-				fmt.Fprintf(simOutputFile, "============\n")
 				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\t\n", cycle, list[i].memLoc, list[i].op)
 				outputRegistersToFile(registry, simOutputFile, otherData)
 
@@ -555,7 +532,6 @@ func main() {
 	inputFilePathPtr := flag.String("i", "input.txt", "input file path")
 	outputFilePathPtr := flag.String("o", "out.txt", "output file path")
 	outputFile2PathPtr := flag.String("o2", "outputsim.txt", "output sim file path")
-
 	flag.Parse()
 	ReadBinary(*inputFilePathPtr)
 	ProcessInstructionList(InstructionList)
