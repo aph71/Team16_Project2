@@ -329,7 +329,12 @@ func outputRegistersToFile(registry []int, simOutputFile *os.File, myMap map[int
 		if end > len(registry) {
 			end = len(registry)
 		}
-		fmt.Fprintf(simOutputFile, "r%d:\t", i)
+		//adds the zero in front of digits that are less than 10 to maintain format
+		if i < 10 {
+			fmt.Fprintf(simOutputFile, "r0%d:\t", i)
+		} else {
+			fmt.Fprintf(simOutputFile, "r%d:\t", i)
+		}
 		for j := i; j < end; j++ {
 			fmt.Fprintf(simOutputFile, "%d\t", registry[j])
 		}
