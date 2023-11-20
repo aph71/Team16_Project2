@@ -359,7 +359,59 @@ func outputRegistersToFile(registry []int, simOutputFile *os.File, myMap map[int
 	}
 	fmt.Fprintf(simOutputFile, "============\n")
 }
+// converts decimal to binary and then shifts either left or right
+// converts back to decimal and returns value
+func shiftLeftOrRight(num int, opcode string, count uint8) int64 {
+	var binary []int
+	negative := false
+	if num < 0 {
+		negative = true
+		convert := num
+		num = int(math.Abs(float64(convert)))
+	}
+	for num != 0 {
+		binary = append(binary, num%2)
+		num = num / 2
+	}
+	binaryString := ""
+	if len(binary) == 0 {
+		binaryString = "0"
+	} else {
+		for i := len(binary) - 1; i >= 0; i-- {
+			binaryString += strconv.Itoa(binary[i])
+		}
+	}
+	leadingZeros := ""
+	for len(leadingZeros)+len(binaryString) != 32 {
+		leadingZeros += "0"
+	}
+	if opcode == "LSR" {
+		newString := ""
+		if negative == false {
+			for count != 0 {
+				newString += "0"
+				count--
+			}
+		} else {
+			for count != 0 {
+				newString += "1"
+				count--
+			}
+		}
 
+		newString += leadingZeros
+		for i := len(binary) - 1; i > 0; i-- {
+			newString += strconv.Itoa(binary[i])
+		}
+		//newInt, _ := strconv.Atoi(newString)
+		returnValue, err := strconv.ParseInt(newString, 2, 64)
+		if err != nil {
+			fmt.Println(err)
+		}
+		return returnValue
+	}
+	return 0
+}
 func simulateInstruction(simOutput string, list []Instruction, registry []int, myMap map[int]map[int]int) {
 	breakHit := false
 	cycle := 1
@@ -457,9 +509,9 @@ func simulateInstruction(simOutput string, list []Instruction, registry []int, m
 				cycle++
 				//*****LSR*****
 			case opcode == 1690:
-				regDest := registry[list[i].rn] >> list[i].shamt
-				registry[list[i].rd] = regDest
-				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s R%d, R%d, #%d\n", cycle, list[i].memLoc, list[i].op, list[i].rd, list[i].rn, list[i].shamt)
+				output := shiftLeftOrRight(registry[list[i].rn], list[i].op, list[i].shamt)
+				registry[list[i].rd] = int(output)
+				fmt.Fprintf(simOutputFile, "Cycle:%d\t%d\t%s\tR%d, R%d, #%d\n", cycle, list[i].memLoc, list[i].op, list[i].rd, list[i].rn, list[i].shamt)
 				outputRegistersToFile(registry, simOutputFile, otherData)
 				cycle++
 				//*****LSL*****
