@@ -584,12 +584,14 @@ var otherData = make(map[int]map[int]int)
 
 func main() {
 	inputFilePathPtr := flag.String("i", "input.txt", "input file path")
-	outputFilePathPtr := flag.String("o", "out.txt", "output file path")
-	outputFile2PathPtr := flag.String("o2", "outputsim.txt", "output sim file path")
+	outputFilePathPtr := flag.String("o", "team16_out", "output file path")
+	//outputFile2PathPtr := flag.String("o2", "outputsim.txt", "output sim file path")
 	flag.Parse()
+	outputDisFile := *outputFilePathPtr + "_dis.txt"
+	outputSimFile := *outputFilePathPtr + "_sim.txt"
 	ReadBinary(*inputFilePathPtr)
 	ProcessInstructionList(InstructionList)
 	//fmt.Println(InstructionList)
-	WriteInstructions(*outputFilePathPtr, InstructionList)
-	simulateInstruction(*outputFile2PathPtr, InstructionList, registryData, otherData)
+	WriteInstructions(outputDisFile, InstructionList)
+	simulateInstruction(outputSimFile, InstructionList, registryData, otherData)
 }
